@@ -46,7 +46,7 @@
                 usernameElement.textContent = '@' + user.username;
                 
                 // Send username to backend
-                fetch('/store_username', {
+                fetch('https://herrprofessor.pythonanywhere.com/store_username', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -54,8 +54,16 @@
                     body: JSON.stringify({username: user.username}),
                 })
                 .then(response => response.json())
-                .then(data => console.log('Success:', data))
-                .catch((error) => console.error('Error:', error));
+                .then(data => {
+                    console.log('Success:', data);
+                    if (data.status === 'success') {
+                        usernameElement.textContent += ' (Stored)';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    usernameElement.textContent += ' (Error storing)';
+                });
             } else {
                 usernameElement.textContent = 'Username not available';
             }
